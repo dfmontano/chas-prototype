@@ -8,12 +8,15 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import Navbar from 'react-bootstrap/Navbar'
 import Button from 'react-bootstrap/Button'
 import {Typeahead} from 'react-bootstrap-typeahead';
+import { useHistory } from 'react-router-dom';
 
 export default function StepOne(props) {
 
     const [validated, setValidated] = useState(false);
     const [providerSelectedOption, setProviderSelectedOption] = useState('no');
     const [tcgaSelectedOption, setTcgaSelectedOption] = useState('no');
+    const history = useHistory();
+
 
     const handleSubmit = event => {
         const form = event.currentTarget;
@@ -21,8 +24,11 @@ export default function StepOne(props) {
             event.preventDefault();
             event.stopPropagation();
         }
-
         setValidated(true);
+
+        if (form.checkValidity() === true) {
+            history.push('/step-two');
+        }
     };
 
     const handleProviderOptionChange = (changeEvent) => {
@@ -31,6 +37,10 @@ export default function StepOne(props) {
 
     const handleTcgaOptionChange = (changeEvent) => {
         setTcgaSelectedOption(changeEvent.target.value)
+    };
+
+    const goToStepTwo = () => {
+        history.push('/step-two');
     };
 
     return (
@@ -104,7 +114,7 @@ export default function StepOne(props) {
                                     ]}
                                 />
                             </Form.Group>
-                            <Form.Group required>
+                            <Form.Group>
                                 <Form.Label>Region</Form.Label>
                                 <Typeahead
                                     onChange={(selected) => {
@@ -117,6 +127,8 @@ export default function StepOne(props) {
                                         "Maule",
                                         "Atacama",
                                     ]}
+                                    isInValid={true}
+                                    isValid={false}
                                 />
                             </Form.Group>
                         </Col>
@@ -213,7 +225,8 @@ export default function StepOne(props) {
                     </Row>
                     <Row>
                         <Col xs={{span: 3, offset: 10}}>
-                            <Button variant="primary" type="submit">SIGUIENTE</Button>
+
+                                <Button variant="primary" type="submit">SIGUIENTE</Button>
                         </Col>
                     </Row>
                 </Form>
